@@ -2,43 +2,54 @@ const addBtn = document.getElementById('add-btn');
 const inputTask = document.getElementById('todo-input');
 const todoList = document.getElementById('todo-list');
 
-addBtn.addEventListener('click', () => {
-    const task = inputTask.value.trim();
-    if(task === ''){
-        alert('Please enter a task');
-        return;
-    }
+function createTaskElement(task) {
     const li = document.createElement('li');
-    li.classList.add('d-flex', 'align-items-center', 'gap-2', 'list-group-item', 'mb-2');
-
     const completeBtn= document.createElement('button');
+    const taskText = document.createElement('span');
+    const DltButton = document.createElement('button');
+
+    taskText.textContent = task;
+    DltButton.textContent = 'Delete';
+    DltButton.classList.add('btn', 'btn-sm' ,'btn-outline-danger','float-end');
+
     completeBtn.textContent = "";
     completeBtn.classList.add('complete-btn');
-
-    const taskText = document.createElement('span');
-    taskText.textContent = task;
-
-    const DltButton = document.createElement('button');
-    DltButton.classList.add('btn', 'btn-sm' ,'btn-outline-danger');
-    DltButton.textContent = 'Delete';
+    
+    
 
     li.appendChild(completeBtn);
     li.appendChild(taskText);
     li.appendChild(DltButton);
-    todoList.appendChild(li);
 
-    inputTask.value = '';
+    li.classList.add('d-flex', 'align-items-center', 'gap-2','justify-content-between', 'list-group-item', 'mb-2','w-100');
 
     completeBtn.addEventListener('click', () => {
         taskText.classList.toggle('completed');
         completeBtn.classList.toggle('done');
     });
 
-
     DltButton.addEventListener('click', (event) => {
     event.stopPropagation();
-    todoList.removeChild(li);
+    li.remove();
     })
+
+    return li;
+}
+
+addBtn.addEventListener('click', () => {
+    const task = inputTask.value.trim();
+    if(task === ''){
+        alert('Please enter a task');
+        return;
+    }
+    
+
+    const taskElement = createTaskElement(task);
+    todoList.appendChild(taskElement);
+
+    inputTask.value = '';
+
+
     
 }) 
 inputTask.addEventListener('keydown', (event) => {
